@@ -35,6 +35,7 @@ if CODESPACE_NAME:
     ALLOWED_HOSTS.append(f'{CODESPACE_NAME}-8000.app.github.dev')
 
 
+
 # Application definition
 
 INSTALLED_APPS = [

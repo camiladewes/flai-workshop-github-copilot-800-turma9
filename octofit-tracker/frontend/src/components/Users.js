@@ -30,36 +30,61 @@ function Users() {
       });
   }, []);
 
-  if (loading) return <div className="container mt-4"><p>Loading users...</p></div>;
-  if (error) return <div className="container mt-4"><p>Error: {error}</p></div>;
+  if (loading) return (
+    <div className="container mt-4 loading-container">
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <p className="mt-3">Loading users...</p>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="container mt-4 error-container">
+      <div className="alert alert-danger" role="alert">
+        <h4 className="alert-heading">Error!</h4>
+        <p>{error}</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="container mt-4">
-      <h2>Users</h2>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Total Points</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.length === 0 ? (
-            <tr>
-              <td colSpan="3">No users found.</td>
-            </tr>
-          ) : (
-            users.map((user, index) => (
-              <tr key={user.id || index}>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td>{user.total_points || 0}</td>
+      <h2><i className="bi bi-person-circle"></i> Users</h2>
+      <p className="text-muted mb-4">All registered users and their achievements</p>
+      
+      {users.length === 0 ? (
+        <div className="alert alert-info" role="alert">
+          <i className="bi bi-info-circle"></i> No users found.
+        </div>
+      ) : (
+        <div className="table-responsive">
+          <table className="table table-hover table-striped align-middle">
+            <thead>
+              <tr>
+                <th scope="col"><i className="bi bi-person-badge"></i> Username</th>
+                <th scope="col"><i className="bi bi-envelope"></i> Email</th>
+                <th scope="col" className="text-center"><i className="bi bi-star-fill"></i> Total Points</th>
+                <th scope="col" className="text-center">Actions</th>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {users.map((user, index) => (
+                <tr key={user.id || index}>
+                  <td><strong>{user.username}</strong></td>
+                  <td>{user.email}</td>
+                  <td className="text-center">
+                    <span className="badge bg-success fs-6">{user.total_points || 0}</span>
+                  </td>
+                  <td className="text-center">
+                    <button className="btn btn-sm btn-outline-primary">View Profile</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

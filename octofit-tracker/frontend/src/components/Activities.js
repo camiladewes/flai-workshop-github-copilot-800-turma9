@@ -30,33 +30,67 @@ function Activities() {
       });
   }, []);
 
-  if (loading) return <div className="container mt-4"><p>Loading activities...</p></div>;
-  if (error) return <div className="container mt-4"><p>Error: {error}</p></div>;
+  if (loading) return (
+    <div className="container mt-4 loading-container">
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <p className="mt-3">Loading activities...</p>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="container mt-4 error-container">
+      <div className="alert alert-danger" role="alert">
+        <h4 className="alert-heading">Error!</h4>
+        <p>{error}</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="container mt-4">
-      <h2>Activities</h2>
-      <div className="row">
-        {activities.length === 0 ? (
-          <p>No activities found.</p>
-        ) : (
-          activities.map((activity, index) => (
-            <div key={activity.id || index} className="col-md-6 mb-3">
-              <div className="card">
+      <h2><i className="bi bi-activity"></i> Activities</h2>
+      <p className="text-muted mb-4">Track and view all fitness activities</p>
+      
+      {activities.length === 0 ? (
+        <div className="alert alert-info" role="alert">
+          <i className="bi bi-info-circle"></i> No activities found.
+        </div>
+      ) : (
+        <div className="row">
+          {activities.map((activity, index) => (
+            <div key={activity.id || index} className="col-md-6 col-lg-4 mb-4">
+              <div className="card h-100">
                 <div className="card-body">
-                  <h5 className="card-title">{activity.activity_type || 'Activity'}</h5>
-                  <p className="card-text">
-                    <strong>Duration:</strong> {activity.duration} minutes<br />
-                    <strong>Distance:</strong> {activity.distance} km<br />
-                    <strong>Calories:</strong> {activity.calories_burned}<br />
-                    <strong>Date:</strong> {new Date(activity.date).toLocaleDateString()}
-                  </p>
+                  <h5 className="card-title">
+                    <i className="bi bi-bicycle"></i> {activity.activity_type || 'Activity'}
+                  </h5>
+                  <hr />
+                  <div className="card-text">
+                    <p className="mb-2">
+                      <span className="badge bg-primary">Duration</span>
+                      <strong className="ms-2">{activity.duration} min</strong>
+                    </p>
+                    <p className="mb-2">
+                      <span className="badge bg-success">Distance</span>
+                      <strong className="ms-2">{activity.distance} km</strong>
+                    </p>
+                    <p className="mb-2">
+                      <span className="badge bg-danger">Calories</span>
+                      <strong className="ms-2">{activity.calories_burned}</strong>
+                    </p>
+                    <p className="mb-0">
+                      <span className="badge bg-secondary">Date</span>
+                      <strong className="ms-2">{new Date(activity.date).toLocaleDateString()}</strong>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

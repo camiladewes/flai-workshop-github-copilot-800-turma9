@@ -1,6 +1,8 @@
--
+---
+description: "Update Django project files for octofit-tracker app"
+---
 
-Update Django project files for octofit-tracker app
+# Update Django project files for octofit-tracker app
 
 # Django App Updates
 

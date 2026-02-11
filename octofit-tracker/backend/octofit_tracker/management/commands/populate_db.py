@@ -234,3 +234,4 @@ class Command(BaseCommand):
         self.stdout.write(f'Team DC points: {dc_total}')
 
         client.close()
+

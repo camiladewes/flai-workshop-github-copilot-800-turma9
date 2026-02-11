@@ -80,7 +80,7 @@ function Leaderboard() {
                     <td className="text-center">
                       <span className={`badge ${rankBadge} fs-6`}>{rank}</span>
                     </td>
-                    <td><strong>{entry.user_name || entry.user || 'Unknown'}</strong></td>
+                    <td><strong>{entry.username || entry.user_name || entry.user || 'Unknown'}</strong></td>
                     <td className="text-center">
                       <span className="badge bg-primary fs-6">{entry.total_points || entry.points || 0}</span>
                     </td>

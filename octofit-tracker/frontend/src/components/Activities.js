@@ -5,6 +5,17 @@ function Activities() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const getActivityIcon = (activityType) => {
+    const type = activityType?.toLowerCase() || '';
+    if (type.includes('run')) return 'bi-person-walking';
+    if (type.includes('bike') || type.includes('cycling')) return 'bi-bicycle';
+    if (type.includes('swim')) return 'bi-water';
+    if (type.includes('yoga')) return 'bi-hearts';
+    if (type.includes('gym') || type.includes('strength')) return 'bi-trophy';
+    if (type.includes('walk')) return 'bi-person-walking';
+    return 'bi-activity';
+  };
+
   useEffect(() => {
     const apiUrl = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/activities/`;
     console.log('Activities API Endpoint:', apiUrl);
@@ -64,7 +75,7 @@ function Activities() {
               <div className="card h-100">
                 <div className="card-body">
                   <h5 className="card-title">
-                    <i className="bi bi-bicycle"></i> {activity.activity_type || 'Activity'}
+                    <i className={`bi ${getActivityIcon(activity.activity_type)}`}></i> {activity.activity_type || 'Activity'}
                   </h5>
                   <hr />
                   <div className="card-text">
@@ -78,7 +89,7 @@ function Activities() {
                     </p>
                     <p className="mb-2">
                       <span className="badge bg-danger">Calories</span>
-                      <strong className="ms-2">{activity.calories_burned}</strong>
+                      <strong className="ms-2">{activity.calories || activity.calories_burned || 0}</strong>
                     </p>
                     <p className="mb-0">
                       <span className="badge bg-secondary">Date</span>

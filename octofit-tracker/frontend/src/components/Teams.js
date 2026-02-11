@@ -4,6 +4,14 @@ function Teams() {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedTeams, setExpandedTeams] = useState({});
+
+  const toggleTeamMembers = (teamId) => {
+    setExpandedTeams(prev => ({
+      ...prev,
+      [teamId]: !prev[teamId]
+    }));
+  };
 
   useEffect(() => {
     const apiUrl = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/teams/`;
@@ -59,27 +67,54 @@ function Teams() {
         </div>
       ) : (
         <div className="row">
-          {teams.map((team, index) => (
-            <div key={team.id || index} className="col-md-6 col-lg-4 mb-4">
-              <div className="card h-100">
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">
-                    <i className="bi bi-shield-check"></i> {team.name}
-                  </h5>
-                  <p className="card-text flex-grow-1">
-                    {team.description || 'No description available'}
-                  </p>
-                  <hr />
-                  <div className="d-flex justify-content-between align-items-center">
-                    <span className="badge bg-info text-dark">
-                      <i className="bi bi-people-fill"></i> {team.member_count || team.members?.length || 0} Members
-                    </span>
-                    <button className="btn btn-sm btn-primary">View Team</button>
+          {teams.map((team, index) => {
+            const isExpanded = expandedTeams[team._id || team.id];
+            const members = Array.isArray(team.members) ? team.members : [];
+            
+            return (
+              <div key={team._id || team.id || index} className="col-md-6 col-lg-4 mb-4">
+                <div className="card h-100">
+                  <div className="card-body d-flex flex-column">
+                    <h5 className="card-title">
+                      <i className="bi bi-shield-check"></i> {team.name}
+                    </h5>
+                    <p className="card-text flex-grow-1">
+                      {team.description || 'No description available'}
+                    </p>
+                    <hr />
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <span className="badge bg-info text-dark">
+                        <i className="bi bi-people-fill"></i> {members.length} Members
+                      </span>
+                      <button 
+                        className="btn btn-sm btn-primary"
+                        onClick={() => toggleTeamMembers(team._id || team.id)}
+                      >
+                        {isExpanded ? 'Hide' : 'View'} Members
+                      </button>
+                    </div>
+                    {isExpanded && (
+                      <div className="mt-2">
+                        <hr />
+                        <h6 className="text-muted mb-2">Team Members:</h6>
+                        {members.length > 0 ? (
+                          <ul className="list-unstyled mb-0">
+                            {members.map((member, idx) => (
+                              <li key={idx} className="mb-1">
+                                <i className="bi bi-person-circle text-primary"></i> {member}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="text-muted mb-0"><small>No members yet</small></p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
